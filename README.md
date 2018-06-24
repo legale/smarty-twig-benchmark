@@ -35,7 +35,13 @@ The test templates are pretty simple:
 Don't take my word for it:
 
 * `composer install`
-* `php bench.php smarty` or `php bench.php twig`
+* `php bench.php smarty` or `php bench.php twig`, or `php bench.php twig`
+
+Syntax: `php bench.php [template] [times optional] [clear_cache optional]`
+
+Default values: 
+- times = 100000
+- clear_cache = false
 
 ## Results
 

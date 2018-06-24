@@ -3,7 +3,7 @@
 
 require __DIR__ . '/vendor/autoload.php';
 
-function benchmark(string $type, int $iterations = 100000)
+function benchmark(string $type, int $times = 100000)
 {
     echo 'Benchmarking ' . $type . "\n";
 
@@ -22,15 +22,15 @@ function benchmark(string $type, int $iterations = 100000)
 
     $start = microtime(true);
 
-    for ($i = 0; $i < $iterations; $i++) {
+    for ($i = 0; $i < $times; $i++) {
         benchmarkOnce($type, $instance, $data);
     }
 
     $end = microtime(true);
 
     echo "\n\n";
-    echo "Time taken: " . ($end - $start) . "\n";
-    echo "Time taken per iteration: " . (($end - $start) / $iterations) . "\n";
+    echo "Time taken: " . ($end - $start) . "s\n";
+    echo "Time taken per iteration: " . (($end - $start) * 1000 / $times) . "ms\n";
 }
 
 function setup($type)
@@ -85,8 +85,13 @@ function benchmarkOnce($type, $instance, $data)
     }
 }
 
-exec('rm -rf cache');
-exec('mkdir cache');
+function clear_cache(){
+    return exec('rm -Rf cache/*');
+}
 
 $type = $argv[1] ?? null;
-benchmark($type);
+$times = $argv[2] ?? null;
+isset($argv[3]) ? clear_cache() : null;
+
+
+benchmark($type, $times);

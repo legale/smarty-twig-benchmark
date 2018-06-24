@@ -4,7 +4,8 @@
     "type": "project",
     "require": {
         "smarty/smarty": "~3.1",
-        "twig/twig": "^2.4"
+        "twig/twig": "^2.4",
+        "symfony/polyfill-ctype": "^1.8"
     },
     "license": "MIT",
     "authors": [
