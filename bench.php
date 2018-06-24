@@ -7,18 +7,13 @@ function benchmark(string $type, int $times = 100000)
 {
     echo 'Benchmarking ' . $type . "\n";
 
-    $instance = setup($type);
     $data = [
         'data' => [
             'some', 'bits', 'to', 'iterate', 'over'
         ]
     ];
+    $instance = setup($type);
 
-    // Prime the cache
-    $result = benchmarkOnce($type, $instance, $data);
-
-    echo "Result:\n";
-    echo $result;
 
     $start = microtime(true);
 
@@ -27,6 +22,13 @@ function benchmark(string $type, int $times = 100000)
     }
 
     $end = microtime(true);
+
+    // Prime the cache
+    $result = benchmarkOnce($type, $instance, $data);
+
+    echo "Result:\n";
+    echo $result;
+
 
     echo "\n\n";
     echo "Time taken: " . ($end - $start) . "s\n";
@@ -60,6 +62,12 @@ function setup($type)
             ]);
 
             return $env->load('index.html.twig');
+
+        case 'plates':
+            $plates = new League\Plates\Engine(dirname(__FILE__) . '/templates');
+            $plate = $plates->make('index.html');
+            return $plate;
+
         default:
             throw new InvalidArgumentException('Unknown type');
     }
@@ -80,17 +88,23 @@ function benchmarkOnce($type, $instance, $data)
         case 'twig_reuse':
             /** @var Twig_TemplateWrapper $instance */
             return $instance->render($data);
+
+        case 'plates':
+            return $instance->render($data);
+            //return $instance->render(, ['data' => $data]);
+
         default:
             throw new InvalidArgumentException('Unknown type');
     }
 }
 
-function clear_cache(){
+function clear_cache()
+{
     return exec('rm -Rf cache/*');
 }
 
 $type = $argv[1] ?? null;
-$times = $argv[2] ?? null;
+$times = isset($argv[2]) ? (int)$argv[2] : 100000;
 isset($argv[3]) ? clear_cache() : null;
 
 

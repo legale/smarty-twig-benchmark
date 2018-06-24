@@ -5,7 +5,8 @@
     "require": {
         "smarty/smarty": "~3.1",
         "twig/twig": "^2.4",
-        "symfony/polyfill-ctype": "^1.8"
+        "symfony/polyfill-ctype": "^1.8",
+        "league/plates": "^3.3"
     },
     "license": "MIT",
     "authors": [
